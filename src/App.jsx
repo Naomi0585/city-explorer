@@ -98,13 +98,14 @@ function App() {
           >
 
             <TileLayer
+            attribution='&copy; OpenStreetMap'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
             <Marker
               position={[
-                Number(location.lat),
-                Number(location.lon)
+                parseFloat(location.lat),
+                parseFloat(location.lon)
               ]}
             >
               <Popup>
