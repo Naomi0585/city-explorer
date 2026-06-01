@@ -5,6 +5,14 @@ import 'leaflet/dist/leaflet.css';
 import { Container, Form, Button, Card } from 'react-bootstrap';
 import './style.css';
 
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
+
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 function App() {
@@ -60,8 +68,8 @@ function App() {
 
           <MapContainer
             center={[
-              location.lat,
-              location.lon
+              Number(location.lat),
+             Number(location.lon)
             ]}
             zoom={13}
             className="map"
@@ -73,8 +81,8 @@ function App() {
 
             <Marker
               position={[
-                location.lat,
-                location.lon
+                Number(Location.lat),
+               Number(location.lon)
               ]}
             >
               <Popup>
