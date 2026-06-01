@@ -20,6 +20,11 @@ function App() {
   const [location, setLocation] = useState(null);
 
   async function getLocation() {
+
+    if (!searchQuery.trim()) {
+      alert('Please enter a place');
+      return;
+    }
     try {
       const API =
         `https://us1.locationiq.com/v1/search.php?key=${API_KEY}&q=${searchQuery}&format=json`;
@@ -43,7 +48,9 @@ function App() {
       <Form className="search-form">
 
         <Form.Control
+        type='text'
           placeholder="Search for a city"
+          value={searchQuery}
           onChange={(e) =>
             setSearchQuery(
               e.target.value
@@ -52,6 +59,7 @@ function App() {
         />
 
         <Button
+        type='button'
           onClick={getLocation}
         >
           Explore!
