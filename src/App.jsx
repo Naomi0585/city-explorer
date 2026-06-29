@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-import { Container, Form, Button, Card } from 'react-bootstrap';
+import {
+  Container,
+  Form,
+  Button,
+  Card,
+  Alert
+} from 'react-bootstrap';
 
 import {
   MapContainer,
@@ -18,22 +24,46 @@ function App() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState(null);
+  const [error, setError] = useState(null);
 
   async function getLocation() {
+
+    // Clear any previous errors
+    setError(null);
+
+    // Check for empty input
     if (!searchQuery.trim()) {
-      alert('Please enter a city.');
+      setLocation(null);
+
+      setError({
+        status: 400,
+        message: 'Please enter a city.'
+      });
+
       return;
     }
 
     try {
+
       const API = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${searchQuery}&format=json`;
 
       const response = await axios.get(API);
 
       setLocation(response.data[0]);
+
     } catch (error) {
+
       console.error('Error fetching location:', error);
-      alert('Unable to find that location.');
+
+      setLocation(null);
+
+      setError({
+        status: error.response?.status || 'Unknown',
+        message:
+          error.response?.data?.error ||
+          'Unable to retrieve location.'
+      });
+
     }
   }
 
@@ -61,6 +91,25 @@ function App() {
         </Button>
 
       </Form>
+
+      {error && (
+        <Alert
+          variant="danger"
+          className="mt-3"
+        >
+          <Alert.Heading>
+            Error
+          </Alert.Heading>
+
+          <p>
+            <strong>Status:</strong> {error.status}
+          </p>
+
+          <p>
+            <strong>Message:</strong> {error.message}
+          </p>
+        </Alert>
+      )}
 
       {location && (
 
